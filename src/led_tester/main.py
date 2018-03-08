@@ -1,7 +1,10 @@
 import urllib.request
 import os
 import re
-
+from led_tester import class_lights
+import pytest
+import sys
+sys.path.append(".")
 
 def readFile(filename):
 	# use readlines to read a line a time
@@ -18,11 +21,29 @@ def readFile(filename):
 		else:
 			print("Not found")
 
-def  regexTest(buffer):
+def regexTest(buffer):
 	N=int(buffer[0])
 	instructions=[]
 	for i in range(1,len(buffer)):
 		regex = re.compile(".*(turn on|turn off|switch)\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*through\s*([+-]?\d+)\s*,\s*([+-]?\d+).*") 
-		newI=regex.match(buffer[i])
+		newI = regex.match(buffer[i])
 		instructions.append(newI)
 	return N,instructions
+
+def mainFunction(filename,N):
+	lights = class_lights.LightTester(N)
+	N,instructions = readFile(filename)
+	for i in instructions:
+		cmd = i[1]
+		x1 = int(i[2])
+		y1 = int(i[3])
+		x2 = int(i[4])
+		y2 = int(i[5])
+		lights.applyLights(cmd,x1,x2,y1,y2)
+	return (lights.countLights())
+
+
+
+
+
+
