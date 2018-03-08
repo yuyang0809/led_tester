@@ -3,7 +3,7 @@ import pytest
 from click.testing import CliRunner
 from led_tester import cli
 from led_tester import main
-from led_tester import class_lights
+
 import numpy as np
 
 
@@ -24,6 +24,6 @@ def test_count():
 def test_initial():
     ifile = "./data/test_data.txt"
     N, instructions = main.readFile(ifile)
-    lights = class_lights.LightTester(N)
+    lights = main.LightTester(N)
     count = np.count_nonzero(lights.lights)
     assert count == 0

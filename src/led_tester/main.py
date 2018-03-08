@@ -1,7 +1,9 @@
 import urllib.request
+import numpy as np
+
 import os
 import re
-from led_tester import class_lights
+
 import pytest
 import sys
 sys.path.append(".")
@@ -31,7 +33,7 @@ def regexTest(buffer):
 	return N,instructions
 
 def mainFunction(filename,N):
-	lights = class_lights.LightTester(N)
+	lights = LightTester(N)
 	N,instructions = readFile(filename)
 	for i in instructions:
 		cmd = i[1]
@@ -44,6 +46,22 @@ def mainFunction(filename,N):
 
 
 
+class LightTester(object):
+	"""main program for LightTester"""
+	def __init__(self, N):
+		self.lights = np.zeros((N,N))
 
+	def applyLights(self,cmd,x1,x2,y1,y2):
+		#if x2>x1 && y2>y2
+		if cmd == "turn on":
+			self.lights[x1:x2+1,y1:y2+1] = 1
+		elif cmd == "turn off":
+			self.lights[x1:x2+1,y1:y2+1] = 0
+		elif cmd == "switch":
+			self.lights[x1:x2+1,y1:y2+1] = self.lights[x1:x2+1,y1:y2+1] * -1 + 1
+	
+	def countLights(self):	
+		count = np.count_nonzero(self.lights)
+		return count
 
 
