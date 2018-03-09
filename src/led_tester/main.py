@@ -8,6 +8,7 @@ import argparse
 sys.path.append(".")
 
 def main():
+	# here is the main function to read web or local file in the terminal and count the number of lights
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--input', help='input help')
 	args = parser.parse_args()
@@ -19,17 +20,13 @@ def main():
 		if line != None:
 			cmd = line[1]		
 			x1,y1,x2,y2 = int(line[2]),int(line[3]),int(line[4]),int(line[5])
-			x1,x2 = lights.setValidValue(x1,x2)
-			y1,y2 = lights.setValidValue(y1,y2)
 			lights.applyLights(cmd,x1,y1,x2,y2)
 
 	count= lights.countLights()
-	print(count)
+	print("There are ",count," lights on.")
 
 if __name__ == '__solve_led_project__':
     main()
-
-
 
 def readFile(filename):
 	# use readlines to read a line a time
@@ -47,6 +44,7 @@ def readFile(filename):
 			print("Not found")
 
 def regexTest(buffer):
+	# apply regex to the instructions
 	N=int(buffer[0])
 	instructions=[]
 	for i in range(1,len(buffer)):
@@ -55,34 +53,31 @@ def regexTest(buffer):
 		instructions.append(newI)
 	return N,instructions
 
-
-
 class LightTester(object):
 	"""main program for LightTester"""
 	def __init__(self, N):
-		self.lights = np.zeros((N,N))
+		self.lights = np.zeros((N,N)) #Preset all lights are off and assign the value = 0.
 		self.size = N
 
-	def setValidValue(self,p1,p2):
-	
-		if p1 < 0:
-			if p2 > 0:
-				p1 = 0
-			else:
-				p1 = p2 = 0
-		if p2 > self.size:
-			if p1 < self.size:
-				p2 = self.size
-			else:
-				p1 = p2 = 0
-		return p1,p2
+	def applyLights(self,cmd,x1,y1,x2,y2):
+		# Determine whether the coordinates are within the boundary and determine the valid coordinates.
+		x1, x2 = min(x1, x2), max(x1, x2)
+		y1, y2 = min(y1, y2), max(y1, y2)
+		if x1>self.size or y1>self.size or x2<0 or y2<0:
+			pass
+		if x1<0:
+			x1 = 0
+		if x2>self.size:
+			x2 = self.size
+		if y1<0:
+			y1 = 0
+		if y2>self.size:
+			y2 = self.size
 
-	def applyLights(self,cmd,x1,x2,y1,y2):
-			
 		if cmd == "turn on":
-			self.lights[x1:x2+1,y1:y2+1] = 1
+			self.lights[x1:x2+1,y1:y2+1] = 1   # when lights turn on, Set the value equal to 1.
 		elif cmd == "turn off":
-			self.lights[x1:x2+1,y1:y2+1] = 0
+			self.lights[x1:x2+1,y1:y2+1] = 0   # when lights turn off, Set the value equal to 0.
 		elif cmd == "switch":
 			self.lights[x1:x2+1,y1:y2+1] = self.lights[x1:x2+1,y1:y2+1] * -1 + 1
 	
