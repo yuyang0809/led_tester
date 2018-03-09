@@ -1,7 +1,11 @@
 # Add your pinned requirements so that they can be easily installed with:
 # pip install -r requirements.txt
 # Remember to also add them in setup.cfg but unpinned.
-# Example:
-# numpy==1.13.3
-# scipy==1.0
+
+numpy==1.14.0
+requests==2.18.4
+pytest==3.4.2
+urllib3==1.22
+
+
 

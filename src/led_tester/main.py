@@ -7,6 +7,7 @@ import sys
 import argparse
 sys.path.append(".")
 
+
 def main():
 	# here is the main function to read web or local file in the terminal and count the number of lights
 	parser = argparse.ArgumentParser()
@@ -24,6 +25,7 @@ def main():
 
 	count= lights.countLights()
 	print("There are ",count," lights on.")
+
 
 if __name__ == '__solve_led_project__':
     main()
@@ -54,7 +56,7 @@ def regexTest(buffer):
 	return N,instructions
 
 class LightTester(object):
-	"""main program for LightTester"""
+	"""Class for LightTester"""
 	def __init__(self, N):
 		self.lights = np.zeros((N,N)) #Preset all lights are off and assign the value = 0.
 		self.size = N
