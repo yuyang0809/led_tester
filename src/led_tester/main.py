@@ -1,12 +1,35 @@
 import urllib.request
 import numpy as np
-
 import os
 import re
-
 import pytest
 import sys
+import argparse
 sys.path.append(".")
+
+def main():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--input', help='input help')
+	args = parser.parse_args()
+	filename = args.input
+	N,instructions = readFile(filename)
+	lights = LightTester(N)
+
+	for line in instructions:
+		if line != None:
+			cmd = line[1]		
+			x1,y1,x2,y2 = int(line[2]),int(line[3]),int(line[4]),int(line[5])
+			x1,x2 = lights.setValidValue(x1,x2)
+			y1,y2 = lights.setValidValue(y1,y2)
+			lights.applyLights(cmd,x1,y1,x2,y2)
+
+	count= lights.countLights()
+	print(count)
+
+if __name__ == '__solve_led_project__':
+    main()
+
+
 
 def readFile(filename):
 	# use readlines to read a line a time
@@ -32,27 +55,30 @@ def regexTest(buffer):
 		instructions.append(newI)
 	return N,instructions
 
-def mainFunction(filename,N):
-	lights = LightTester(N)
-	N,instructions = readFile(filename)
-	for i in instructions:
-		cmd = i[1]
-		x1 = int(i[2])
-		y1 = int(i[3])
-		x2 = int(i[4])
-		y2 = int(i[5])
-		lights.applyLights(cmd,x1,x2,y1,y2)
-	return (lights.countLights())
-
 
 
 class LightTester(object):
 	"""main program for LightTester"""
 	def __init__(self, N):
 		self.lights = np.zeros((N,N))
+		self.size = N
+
+	def setValidValue(self,p1,p2):
+	
+		if p1 < 0:
+			if p2 > 0:
+				p1 = 0
+			else:
+				p1 = p2 = 0
+		if p2 > self.size:
+			if p1 < self.size:
+				p2 = self.size
+			else:
+				p1 = p2 = 0
+		return p1,p2
 
 	def applyLights(self,cmd,x1,x2,y1,y2):
-		#if x2>x1 && y2>y2
+			
 		if cmd == "turn on":
 			self.lights[x1:x2+1,y1:y2+1] = 1
 		elif cmd == "turn off":

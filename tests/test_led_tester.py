@@ -3,7 +3,6 @@ import pytest
 from click.testing import CliRunner
 from led_tester import cli
 from led_tester import main
-
 import numpy as np
 
 
@@ -27,3 +26,5 @@ def test_initial():
     lights = main.LightTester(N)
     count = np.count_nonzero(lights.lights)
     assert count == 0
+
+
