@@ -2,7 +2,7 @@
 # pip install -r requirements.txt
 # Remember to also add them in setup.cfg but unpinned.
 
-numpy==1.14.0
+numpy==1.22.0
 requests==2.18.4
 pytest==3.4.2
 urllib3==1.22
